@@ -1,0 +1,12 @@
+python-telegram-bot
+opencv-python
+pandas
+scikit-image
+python-dotenv
+# Optional for Google Sheets:
+gspread
+google-auth
+google-auth-oauthlib
+google-auth-httplib2
+google-generativeai
+Pillow

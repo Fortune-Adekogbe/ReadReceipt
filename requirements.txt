@@ -12,3 +12,4 @@ google-generativeai
 Pillow
 gradio
 PyMuPDF==1.26.0
+# PIN versions.

@@ -3,10 +3,10 @@ import cv2
 import os
 from skimage.metrics import structural_similarity as ssim
 import numpy as np
-import uuid
+import time
 from config import TEMP_DIR
 
-def extract_distinct_frames(video_path, similarity_threshold=0.25):
+def extract_distinct_frames(video_path, similarity_threshold=0.32):
     """
     Extracts distinct frames from a video.
     A frame is considered distinct if its structural similarity to the
@@ -56,7 +56,7 @@ def extract_distinct_frames(video_path, similarity_threshold=0.25):
 
 
         if is_distinct:
-            frame_filename = os.path.join(TEMP_DIR, f"frame_{uuid.uuid4()}.png")
+            frame_filename = os.path.join(TEMP_DIR, f"frame_{time.time()}.png")
             cv2.imwrite(frame_filename, frame)
             distinct_frames_paths.append(frame_filename)
             prev_gray_frame = current_gray_frame
@@ -91,7 +91,7 @@ def extract_distinct_frames_motion(video_path, motion_threshold=1.0, stabilizati
     prev_gray = cv2.cvtColor(prev_frame_bgr, cv2.COLOR_BGR2GRAY)
     
     # Capture the first frame as a new section
-    first_frame_path = os.path.join(TEMP_DIR, f"section_0_{uuid.uuid4()}.png")
+    first_frame_path = os.path.join(TEMP_DIR, f"section_0_{time.time()}.png")
     cv2.imwrite(first_frame_path, prev_frame_bgr)
     new_section_frame_paths.append(first_frame_path)
     last_captured_gray_for_ssim = prev_gray.copy() # For SSIM check later
@@ -133,7 +133,7 @@ def extract_distinct_frames_motion(video_path, motion_threshold=1.0, stabilizati
 
                 if (1.0 - s) > min_ssim_diff:
                     print(f"Frame {frame_idx}: New section detected after scroll! (SSIM diff: {1-s:.2f})")
-                    section_frame_path = os.path.join(TEMP_DIR, f"section_{len(new_section_frame_paths)}_{uuid.uuid4()}.png")
+                    section_frame_path = os.path.join(TEMP_DIR, f"section_{len(new_section_frame_paths)}_{time.time()}.png")
                     cv2.imwrite(section_frame_path, current_frame_bgr)
                     new_section_frame_paths.append(section_frame_path)
                     last_captured_gray_for_ssim = current_gray.copy() # Update the reference
@@ -163,4 +163,5 @@ def cleanup_files(file_paths):
             print(f"Error deleting file {file_path}: {e}")
 
 if __name__ == "__main__":
-    extract_distinct_frames_motion("test_data\PXL_20250606_020602320.mp4")
+    # extract_distinct_frames("test_data\PXL_20250606_064422557.mp4")
+    extract_distinct_frames_motion("test_data\PXL_20250606_064422557.mp4")

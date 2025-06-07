@@ -89,10 +89,10 @@ The bot will start polling for updates from Telegram.
 
 1.  Find your bot on Telegram (the one you created with BotFather).
 2.  Send the `/start` command to initiate a conversation.
-3.  Send a video file of a receipt to the bot.
-    *   Ensure the video clearly shows the receipt items.
-    *   A smooth pan or scroll across the receipt is ideal.
-4.  The bot will acknowledge the video and start processing. This may take some time depending on video length and API response times.
+3.  Send a PDF file of a receipt to the bot.
+    *   Ensure the document clearly shows the receipt items.
+    *   Ensure that each page contains no repitition.
+4.  The bot will acknowledge the document and start processing. This may take some time depending on document length and API response times.
 5.  Once processed, the bot will send back a CSV file containing the extracted receipt items.
 
 ## Key Technologies Used

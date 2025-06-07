@@ -1,9 +1,10 @@
 # ReadReceipt
 
-This project implements a Telegram bot that can extract line items from a video recording of a grocery receipt. It currently leverages Google's Gemini models for its advanced video understanding and OCR capabilities.
+This project implements a bot that can extract line items from a scanned grocery receipt either as a PDF or as a video. It currently leverages Google's Gemini models for its advanced video understanding and OCR capabilities. Video processing is best done via the included Gradio app as Telegram has a size limit.
 
 ## Features
-*   Telegram bot interface for easy interaction.
+*   Telegram bot interface for easy interaction with PDFs.
+*   Gradio app interface for easy interaction with Videos.
 *   Utilizes Google Gemini models for powerful image- or video-based OCR and data extraction.
 *   Extracts item name, quantity purchased, and cost per item.
 *   Handles scrolling/panning videos of receipts.
@@ -15,6 +16,7 @@ This project implements a Telegram bot that can extract line items from a video 
 ```
 receipt-bot/
 ├── bot.py                     # Main Telegram bot logic
+├── app_gradio.py              # Main Gradio app logic
 ├── video_processor.py         # Utility for video file cleanup and frame extraction methods
 ├── ocr_extractor.py           # Handles OCR and data extraction using Gemini API
 ├── data_aggregator.py         # Aggregates and formats data from OCR
@@ -24,7 +26,7 @@ receipt-bot/
 └── temp_files/                # Directory for temporary video/frame files (auto-created)
 ```
 
-## Setup and Installation
+## Telegram Bot Setup and Installation
 
 **1. Prerequisites:**
 
@@ -97,6 +99,7 @@ The bot will start polling for updates from Telegram.
 
 *   **Python:** Core programming language.
 *   **`python-telegram-bot`:** For interacting with the Telegram Bot API.
+*   **gradio:** For building a minimal user interface.
 *   **`google-generativeai`:** Python SDK for Google's Generative AI models (Gemini).
 *   **`OpenCV-Python`:**  For video processing tasks like frame reading.
 *   **`Pillow` (PIL Fork):** For image handling, particularly when preparing data for Gemini.
@@ -106,14 +109,19 @@ The bot will start polling for updates from Telegram.
 
 ## Future Enhancements / To-Do
 
-*   **More Robust Error Handling:** Implement more comprehensive error handling for API failures, invalid video formats, etc.
+*   **Support for Image Inputs:** Allow users to send static images of receipts directly.
+*   **Support for PDF Inputs:** Allow users to send static PDFs of receipts directly. ✅
 *   **User Feedback & Progress:** Provide more granular feedback to the user during long processing steps.
 *   **Configuration Options via Bot Commands:** Allow users to set preferences (e.g., output format).
-*   **Advanced Aggregation Logic:** Further refine data aggregation if Gemini's direct output sometimes contains duplicates or needs cleaning.
-*   **Support for Image Inputs:** Allow users to send static images of receipts directly.
+*   **Advanced Aggregation Logic:** Further refine data aggregation if Gemini's direct output sometimes contains duplicates or needs cleaning. 
 *   **Alternative OCR Models:** Integrate options for other OCR services or local OCR (e.g., Tesseract) as a fallback or alternative.
+    - Try Mistral OCR
+    - Consider Landing AI Document Agent
+    - ...
 *   **Testing:** Add unit and integration tests.
 *   **Deployment:** Document steps for deploying the bot (e.g., using Docker, cloud platforms).
+*   **More Robust Error Handling:** Implement more comprehensive error handling for API failures, invalid video formats, etc.
+
 
 ## Contributing
 

@@ -10,3 +10,5 @@ google-auth-oauthlib
 google-auth-httplib2
 google-generativeai
 Pillow
+gradio
+PyMuPDF==1.26.0

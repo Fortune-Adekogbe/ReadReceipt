@@ -1,4 +1,5 @@
 # ocr_extractor.py
+from datetime import datetime
 import google.generativeai as genai
 from PIL import Image # For handling images
 import json
@@ -23,6 +24,66 @@ else:
 
 # Model name - use the latest flash model
 GEMINI_MODEL_NAME = "models/gemini-2.0-flash"
+
+
+def extract_date(frame_path, limit_of_reason=365):
+    """
+    Extracts date from an image using Gemini 2.0 Flash.
+    Returns a list of dictionaries:
+    """
+    
+    if not GOOGLE_API_KEY or GOOGLE_API_KEY == "YOUR_GOOGLE_GEMINI_API_KEY":
+        logger.error("Gemini API key not available. Cannot process image.")
+        return []
+
+    try:
+        logger.info(f"Checking for date Gemini: {os.path.basename(frame_path)}")
+        img = Image.open(frame_path)
+
+        # Safety settings - adjust as needed, though for receipts, harmful content is unlikely
+        safety_settings = [
+            {"category": "HARM_CATEGORY_HARASSMENT", "threshold": "BLOCK_MEDIUM_AND_ABOVE"},
+            {"category": "HARM_CATEGORY_HATE_SPEECH", "threshold": "BLOCK_MEDIUM_AND_ABOVE"},
+            {"category": "HARM_CATEGORY_SEXUALLY_EXPLICIT", "threshold": "BLOCK_MEDIUM_AND_ABOVE"},
+            {"category": "HARM_CATEGORY_DANGEROUS_CONTENT", "threshold": "BLOCK_MEDIUM_AND_ABOVE"},
+        ]
+        
+        # Generation config - tune temperature for more/less creative responses 
+        generation_config = genai.types.GenerationConfig(
+            # candidate_count=1, # Get only one response
+            # stop_sequences=['\n\n\n'], # stop if it generates too much
+            # max_output_tokens=1024, # Adjust if needed
+            temperature=0.2 # Lower temperature for more deterministic output
+        )
+
+        model = genai.GenerativeModel(
+            GEMINI_MODEL_NAME,
+            safety_settings=safety_settings,
+            generation_config=generation_config
+        )
+
+        prompt = """
+        Analyze this image and extract a single date written in the format MM/DD/YY.
+        Focus ONLY on the date.
+        Ensure the output is ONLY the DATE string and nothing else.
+        IF no date exists, return an empty string.
+        """
+
+        response = model.generate_content([prompt, img]) # Multimodal input
+        response_text = response.text.strip()
+        print(response_text)
+
+        format_string = "%m/%d/%y"
+        date_object = datetime.strptime(response_text, format_string)
+        # If the receipt lists a date beyond the limit of reason, ignore
+        if (datetime.now() - date_object).days > limit_of_reason:
+            response_text = ""
+
+        return response_text
+
+    except Exception as e:
+        logger.error(f"Error during Gemini API call for {os.path.basename(frame_path)}: {e}", exc_info=True)
+        return ''
 
 def extract_data_from_frame_gemini(frame_path):
     """
@@ -185,7 +246,7 @@ def extract_data_from_video_gemini(video_path):
         # If the same list item is visible at different points in the video, treat it as one item and try to get the clearest information for it.
         prompt = """
         Analyze the entire content of this video, which shows a single grocery receipt being scanned or panned across.
-        Your goal is to extract all individual line items from this single receipt ignoring the supermarket discounts.
+        Your goal is to extract all individual items from this single receipt ignoring the supermarket discounts.
 
         For each distinct line item on the receipt, provide:
         1. 'item_name': The full description of the item as accurately as possible.
@@ -254,19 +315,20 @@ def extract_data_from_video_gemini(video_path):
 
 # Example usage (for direct testing of this file)
 if __name__ == '__main__':
-    sample_test_video = "test_data/PXL_20250606_020602320.mp4"
+    extract_date("temp_files/frame_1749233019.5217779.png")
+    # sample_test_video = "test_data/PXL_20250606_064422557.mp4"
 
-    if os.path.exists(sample_test_video):
-        print(f"\nTesting direct video processing with Gemini using video: {sample_test_video}")
-        # Note: This direct test might take a while depending on video size and API response
-        data_video = extract_data_from_video_gemini(sample_test_video)
-        print("Extracted data from video:")
-        if data_video:
-            for item_data in data_video:
-                print(item_data)
-        else:
-            print("No data extracted or an error occurred.")
-
+    # if os.path.exists(sample_test_video):
+    #     print(f"\nTesting direct video processing with Gemini using video: {sample_test_video}")
+    #     # Note: This direct test might take a while depending on video size and API response
+    #     data_video = extract_data_from_video_gemini(sample_test_video)
+    #     print("Extracted data from video:")
+    #     if data_video:
+    #         for item_data in data_video:
+    #             print(item_data)
+    #     else:
+    #         print("No data extracted or an error occurred.")
+    
 #     frame_path = "temp_files/frame_13b88bff-85a0-46d3-8cad-65be0f51c287.png"
 #     try:
 #         if os.path.exists(frame_path):

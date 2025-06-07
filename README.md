@@ -108,7 +108,8 @@ The bot will start polling for updates from Telegram.
 *   **`python-dotenv`:** For managing environment variables.
 
 ## Future Enhancements / To-Do
-
+*    Extend Gradio app to process PDFs as well.
+*    Update requirements with pinned package versions
 *   **Support for Image Inputs:** Allow users to send static images of receipts directly.
 *   **Support for PDF Inputs:** Allow users to send static PDFs of receipts directly. ✅
 *   **User Feedback & Progress:** Provide more granular feedback to the user during long processing steps.

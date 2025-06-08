@@ -1,15 +1,15 @@
-python-telegram-bot
-opencv-python
-pandas
-scikit-image
-python-dotenv
-# Optional for Google Sheets:
-gspread
-google-auth
-google-auth-oauthlib
-google-auth-httplib2
-google-generativeai
-Pillow
-gradio
+python-telegram-bot==22.1
+opencv-python==4.11.0.86
+pandas==2.3.0
+scikit-image==0.25.2
+python-dotenv==1.1.0
+Pillow==11.2.1
+gradio==5.33.0
 PyMuPDF==1.26.0
-# PIN versions.
+telethon==1.40.0
+# # Optional for Google Sheets:
+# gspread
+# google-auth
+# google-auth-oauthlib
+# google-auth-httplib2
+# google-generativeai

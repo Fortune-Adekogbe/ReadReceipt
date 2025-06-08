@@ -7,6 +7,9 @@ load_dotenv() # Load variables from .env file if it exists
 TELEGRAM_BOT_TOKEN = os.getenv("TELEGRAM_BOT_TOKEN", "YOUR_TELEGRAM_BOT_TOKEN")
 GOOGLE_API_KEY = os.getenv("GOOGLE_API_KEY", "YOUR_GOOGLE_GEMINI_API_KEY") # New line
 
+# For telethon
+TELEGRAM_API_ID= os.getenv("TELEGRAM_API_ID", "YOUR_TELEGRAM_API_ID")
+TELEGRAM_API_HASH= os.getenv("TELEGRAM_API_HASH", "YOUR_TELEGRAM_API_HASH")
 
 # For Google Sheets (optional) - path to your service account JSON file
 GOOGLE_SHEETS_SERVICE_ACCOUNT_FILE = os.getenv("GOOGLE_SHEETS_SERVICE_ACCOUNT_FILE", "service_account.json")

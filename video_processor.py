@@ -164,4 +164,4 @@ def cleanup_files(file_paths):
 
 if __name__ == "__main__":
     # extract_distinct_frames("test_data\PXL_20250606_064422557.mp4")
-    extract_distinct_frames_motion("test_data\PXL_20250606_064422557.mp4")
+    extract_distinct_frames_motion("test_data/PXL_20250606_064422557.mp4")

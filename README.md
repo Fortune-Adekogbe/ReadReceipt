@@ -1,9 +1,9 @@
 # ReadReceipt
 
-This project implements a bot that can extract line items from a scanned grocery receipt either as a PDF or as a video. It currently leverages Google's Gemini models for its advanced video understanding and OCR capabilities. Video processing is best done via the included Gradio app as Telegram has a size limit.
+This project implements a bot that can extract line items from a scanned grocery receipt either as a PDF or as a video. It currently leverages Google's Gemini models for its advanced video understanding and OCR capabilities.
 
 ## Features
-*   Telegram bot interface for easy interaction with PDFs.
+*   Telegram bot interface for easy interaction.
 *   Gradio app interface for easy interaction with Videos.
 *   Utilizes Google Gemini models for powerful image- or video-based OCR and data extraction.
 *   Extracts item name, quantity purchased, and cost per item.
@@ -15,12 +15,14 @@ This project implements a bot that can extract line items from a scanned grocery
 
 ```
 receipt-bot/
-├── bot.py                     # Main Telegram bot logic
+├── bot.py                     # Main Telegram bot logic using Telegram Bot API
+├── bot_telethon.py            # Main Telegram bot logic using Telegram API
 ├── app_gradio.py              # Main Gradio app logic
 ├── video_processor.py         # Utility for video file cleanup and frame extraction methods
 ├── ocr_extractor.py           # Handles OCR and data extraction using Gemini API
 ├── data_aggregator.py         # Aggregates and formats data from OCR
 ├── config.py                  # For API keys and settings
+├── Dockerfile                 # For containerization and ease of bot deployment
 ├── .env.example               # Example environment file (copy to .env)
 ├── requirements.txt           # Python dependencies
 └── temp_files/                # Directory for temporary video/frame files (auto-created)
@@ -80,7 +82,7 @@ mkdir temp_files
 Once all configurations are set, run the main bot script:
 
 ```bash
-python bot.py
+python bot_telethon.py
 ```
 
 The bot will start polling for updates from Telegram.
@@ -89,10 +91,10 @@ The bot will start polling for updates from Telegram.
 
 1.  Find your bot on Telegram (the one you created with BotFather).
 2.  Send the `/start` command to initiate a conversation.
-3.  Send a PDF file of a receipt to the bot.
+3.  Send a Video or PDF file of a receipt to the bot.
     *   Ensure the document clearly shows the receipt items.
     *   Ensure that each page contains no repitition.
-4.  The bot will acknowledge the document and start processing. This may take some time depending on document length and API response times.
+4.  The bot will acknowledge the file and start processing. This may take some time depending on file size, length and API response times.
 5.  Once processed, the bot will send back a CSV file containing the extracted receipt items.
 
 ## Key Technologies Used
@@ -108,8 +110,8 @@ The bot will start polling for updates from Telegram.
 *   **`python-dotenv`:** For managing environment variables.
 
 ## Future Enhancements / To-Do
-*    Extend Gradio app to process PDFs as well.
-*    Update requirements with pinned package versions
+*   Extend Gradio app to process PDFs as well.
+*   Transition to Telegram API implementation of Bot to get arounf file size limit. ✅
 *   **Support for Image Inputs:** Allow users to send static images of receipts directly.
 *   **Support for PDF Inputs:** Allow users to send static PDFs of receipts directly. ✅
 *   **User Feedback & Progress:** Provide more granular feedback to the user during long processing steps.

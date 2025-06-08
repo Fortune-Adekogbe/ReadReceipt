@@ -5,6 +5,8 @@ from PIL import Image # For handling images
 import json
 import os
 import logging
+import re
+
 import mimetypes # To determine video MIME type
 
 from config import GOOGLE_API_KEY
@@ -37,7 +39,7 @@ def extract_date(frame_path, limit_of_reason=365):
         return []
 
     try:
-        logger.info(f"Checking for date Gemini: {os.path.basename(frame_path)}")
+        logger.info(f"Checking for date in {os.path.basename(frame_path)}...")
         img = Image.open(frame_path)
 
         # Safety settings - adjust as needed, though for receipts, harmful content is unlikely
@@ -71,12 +73,24 @@ def extract_date(frame_path, limit_of_reason=365):
 
         response = model.generate_content([prompt, img]) # Multimodal input
         response_text = response.text.strip()
-        print(response_text)
 
-        format_string = "%m/%d/%y"
-        date_object = datetime.strptime(response_text, format_string)
-        # If the receipt lists a date beyond the limit of reason, ignore
-        if (datetime.now() - date_object).days > limit_of_reason:
+        # try to extract date like string
+        match = re.search(r"(\d{2}/\d{2}/\d{2})", response_text)
+        if match:
+            response_text = match.group(1)
+        else:
+            response_text = ""
+
+        print(response_text)
+        
+        # Confirm that string is actually a valid date
+        try:
+            format_string = "%m/%d/%y"
+            date_object = datetime.strptime(response_text, format_string)
+            # If the receipt lists a date beyond the limit of reason, ignore
+            if (datetime.now() - date_object).days > limit_of_reason:
+                response_text = ""
+        except:
             response_text = ""
 
         return response_text

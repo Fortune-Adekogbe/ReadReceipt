@@ -148,7 +148,7 @@ async def handle_document(event: events.NewMessage.Event) -> None:
     message = event.message
     document = message.document
 
-    if document.mime_type != "application/pdf" or not message.video:
+    if not(document.mime_type == "application/pdf" or message.video):
         await event.reply("❌ Please send me a PDF file or a Video, not something else.")
         return
 

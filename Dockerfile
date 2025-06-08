@@ -33,12 +33,9 @@ COPY . .
 # So /app/temp_files/ will be the path inside the container.
 VOLUME /app/temp_files
 
-# Expose a volume for cookies (for easier management)
-VOLUME /app/cookies
-
 # Define environment variables for configuration (these will be set at runtime)
 # You can set defaults here, but it's better to pass them during `docker run`
 
 # Command to run the application
 # Replace bot.py with the actual name of your main Python script
-CMD ["python", "bot.py"]
+CMD ["python", "bot_telethon.py"]

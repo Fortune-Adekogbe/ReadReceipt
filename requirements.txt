@@ -7,9 +7,9 @@ Pillow==11.2.1
 gradio==5.33.0
 PyMuPDF==1.26.0
 telethon==1.40.0
+google-generativeai==0.8.5
 # # Optional for Google Sheets:
 # gspread
 # google-auth
 # google-auth-oauthlib
 # google-auth-httplib2
-# google-generativeai
